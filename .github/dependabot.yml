@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      vendure:
+        patterns: ['@vendure/*']
+      tooling:
+        patterns: ['@biomejs/*', 'typescript', 'vitest', '@vitest/*', 'vite', 'rimraf', '@types/*']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

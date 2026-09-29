@@ -1,0 +1,115 @@
+name: CI
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint, typecheck, unit tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: yarn
+
+      - run: yarn install --frozen-lockfile
+
+      - run: yarn lint:ci
+
+      - run: yarn typecheck
+
+      - run: yarn test:coverage
+
+      - run: yarn build
+
+      - run: yarn smoke
+
+      - run: yarn pack:check
+
+  e2e:
+    name: e2e (Vendure ${{ matrix.vendure }}, Node ${{ matrix.node }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Lowest supported 3.x line (Nest 10) and the patch-3x line (writes every upload from a stream).
+          - { os: ubuntu-latest, node: 22, vendure: 3.0.8 }
+          - { os: ubuntu-latest, node: 22, vendure: 3.5.7 }
+          # Latest stable (small uploads written from a Buffer since 3.6.5).
+          - { os: ubuntu-latest, node: 22, vendure: 3.7.3 }
+          - { os: ubuntu-latest, node: 24, vendure: 3.7.3 }
+          # Vendure builds asset keys with path.join: backslashes on Windows.
+          - { os: windows-latest, node: 22, vendure: 3.7.3 }
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: yarn
+
+      - name: Pin Vendure ${{ matrix.vendure }}
+        if: matrix.vendure != '3.7.3'
+        run: node scripts/use-vendure-version.cjs ${{ matrix.vendure }}
+
+      - name: Install
+        run: yarn install --non-interactive ${{ matrix.vendure == '3.7.3' && '--frozen-lockfile' || '' }}
+
+      - run: yarn test
+
+      - run: yarn test:e2e
+
+  e2e-next:
+    name: e2e (next Vendure minor, non-blocking)
+    runs-on: ubuntu-latest
+    # Vendure 3.8 moves to NestJS 12, which Factorydrive 2.0 does not list in its peer range yet.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Pin the Vendure `minor` prerelease
+        run: node scripts/use-vendure-version.cjs "$(npm view @vendure/core@minor version | tail -n 1)"
+
+      - run: yarn install --non-interactive
+
+      - run: yarn test:e2e
+
+  e2e-s3:
+    name: e2e (S3-compatible storage, RustFS, non-blocking)
+    runs-on: ubuntu-latest
+    # Expected to fail until @ficsysfr/nestjs_module_factorydrive-s3 uploads streams of unknown
+    # length (it currently calls putObject without a Content-Length).
+    continue-on-error: true
+    env:
+      FACTORYDRIVE_E2E_S3: '1'
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: yarn
+
+      - run: yarn install --frozen-lockfile
+
+      - run: yarn test:e2e:s3

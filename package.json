@@ -1,0 +1,102 @@
+{
+  "name": "@ficsysfr/vendure-plugin-factorydrive",
+  "version": "0.1.0",
+  "description": "Vendure AssetStorageStrategy backed by Factorydrive disks (local, S3, RustFS, MinIO, R2, SFTP, custom drivers)",
+  "repository": "https://github.com/FicSysFR/vendure-plugin-factorydrive.git",
+  "homepage": "https://github.com/FicSysFR/vendure-plugin-factorydrive#readme",
+  "bugs": {
+    "url": "https://github.com/FicSysFR/vendure-plugin-factorydrive/issues"
+  },
+  "author": "tacxou <12997062+tacxou@users.noreply.github.com> (https://github.com/tacxou)",
+  "contributors": [
+    {
+      "name": "tacxou",
+      "email": "12997062+tacxou@users.noreply.github.com",
+      "url": "https://github.com/tacxou"
+    },
+    {
+      "name": "Contributors",
+      "url": "https://github.com/FicSysFR/vendure-plugin-factorydrive/graphs/contributors"
+    }
+  ],
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/**/*",
+    "!dist/**/*.tsbuildinfo",
+    "src/**/*.ts",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "vendure",
+    "vendure-plugin",
+    "asset",
+    "assets",
+    "storage",
+    "asset-storage-strategy",
+    "factorydrive",
+    "nestjs",
+    "s3",
+    "rustfs",
+    "minio",
+    "r2",
+    "sftp"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json",
+    "lint": "biome check .",
+    "lint:ci": "biome ci .",
+    "lint:fix": "biome check --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "vitest run -c vitest.e2e.config.mts",
+    "test:e2e:s3": "vitest run -c vitest.e2e-s3.config.mts",
+    "test:e2e:clean": "rimraf e2e/__data__",
+    "smoke": "node scripts/dist-smoke.cjs",
+    "pack:check": "npm pack --dry-run",
+    "prepublishOnly": "yarn lint:ci && yarn typecheck && yarn build && yarn test && yarn smoke"
+  },
+  "peerDependencies": {
+    "@ficsysfr/nestjs_module_factorydrive": "^2.0.0",
+    "@vendure/asset-server-plugin": "^3.0.0",
+    "@vendure/core": "^3.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@ficsysfr/nestjs_module_factorydrive": "^2.0.0",
+    "@ficsysfr/nestjs_module_factorydrive-s3": "^2.0.0",
+    "@types/node": "^22.20.4",
+    "@vendure/asset-server-plugin": "3.7.3",
+    "@vendure/core": "3.7.3",
+    "@vendure/testing": "3.7.3",
+    "@vitest/coverage-v8": "^3.2.7",
+    "graphql-tag": "^2.12.7",
+    "rimraf": "^6.1.3",
+    "testcontainers": "^12.2.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.6",
+    "vitest": "^3.2.7"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "yarn@1.22.22"
+}
