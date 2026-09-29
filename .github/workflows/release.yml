@@ -1,0 +1,93 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_increment:
+        description: 'Version part to bump'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - 'major'
+          - 'minor'
+          - 'patch'
+      npm_publish:
+        description: 'Publish to the npm registry?'
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    name: Publish release
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: yarn
+
+      - run: yarn install --frozen-lockfile
+
+      - name: Bump version and update CHANGELOG.md
+        run: node scripts/prepare-release.cjs --increment "${{ inputs.version_increment }}" --notes-out "${{ runner.temp }}/release-notes.md" --github-env
+
+      # main can move while this job runs (another release, a direct push): a plain push is
+      # then rejected as non-fast-forward. Rebase the release commit onto origin/main and
+      # retry instead of failing the whole run.
+      - name: Push release commit and tag
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            if git push origin "HEAD:refs/heads/main" && git push origin "${RELEASE_TAG}"; then
+              exit 0
+            fi
+            if [ "$attempt" -ge 3 ]; then
+              break
+            fi
+            echo "::warning::push rejected (attempt ${attempt}/3) — rebasing on origin/main and retrying"
+            git fetch origin main
+            git rebase origin/main
+            git tag -d "${RELEASE_TAG}"
+            git tag -a "${RELEASE_TAG}" -m "Release ${RELEASE_TAG}"
+          done
+          echo "::error::could not push to main after 3 attempts" >&2
+          exit 1
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "${RELEASE_TAG}" --target main --title "${RELEASE_TAG}" --notes-file "${{ runner.temp }}/release-notes.md" --latest
+
+      - name: Publish to npm
+        if: ${{ inputs.npm_publish && secrets.NPM_TOKEN != '' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance
+
+      - name: npm publish skipped
+        if: ${{ inputs.npm_publish && secrets.NPM_TOKEN == '' }}
+        run: echo "::warning::npm_publish was requested but the NPM_TOKEN secret is not set — skipping. Add it with 'gh secret set NPM_TOKEN' to enable npm publishing."
