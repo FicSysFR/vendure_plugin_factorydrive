@@ -5,6 +5,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-09-30
+
 ### Fixed
 
 - Correct the GitHub repository URLs in the npm package metadata to use `vendure_plugin_factorydrive`.
