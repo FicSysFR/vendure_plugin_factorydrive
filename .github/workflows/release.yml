@@ -97,8 +97,13 @@ jobs:
       # token, provided a Trusted Publisher for this exact repo + workflow file is
       # configured on npmjs.com (package Settings → Publishing access). Requires npm
       # CLI >= 11.5.1, hence the upgrade — Node 22's bundled npm predates it.
+      #
+      # --ignore-scripts skips prepublishOnly (which shells out to yarn and would hit
+      # the same ${NODE_AUTH_TOKEN} problem as above). It's redundant here anyway — the
+      # ci job above already ran that same lint/typecheck/build/test/smoke suite; the
+      # hook stays in package.json as a safety net for a manual, non-CI `npm publish`.
       - name: Publish to npm (OIDC Trusted Publishing)
         if: ${{ inputs.npm_publish }}
         run: |
           npm install -g npm@latest
-          npm publish --access public --provenance
+          npm publish --ignore-scripts --access public --provenance
