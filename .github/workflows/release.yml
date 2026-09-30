@@ -82,12 +82,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release create "${RELEASE_TAG}" --target main --title "${RELEASE_TAG}" --notes-file "${{ runner.temp }}/release-notes.md" --latest
 
-      - name: Publish to npm
-        if: ${{ inputs.npm_publish && secrets.NPM_TOKEN != '' }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public --provenance
-
-      - name: npm publish skipped
-        if: ${{ inputs.npm_publish && secrets.NPM_TOKEN == '' }}
-        run: echo "::warning::npm_publish was requested but the NPM_TOKEN secret is not set — skipping. Add it with 'gh secret set NPM_TOKEN' to enable npm publishing."
+      # OIDC Trusted Publishing: no npm token/secret involved. npm exchanges this job's
+      # GitHub Actions OIDC identity (id-token: write, above) for a short-lived publish
+      # token, provided a Trusted Publisher for this exact repo + workflow file is
+      # configured on npmjs.com (package Settings → Publishing access). Requires npm
+      # CLI >= 11.5.1, hence the upgrade — Node 22's bundled npm predates it.
+      - name: Publish to npm (OIDC Trusted Publishing)
+        if: ${{ inputs.npm_publish }}
+        run: |
+          npm install -g npm@latest
+          npm publish --access public --provenance
