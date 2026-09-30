@@ -47,7 +47,6 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-          registry-url: https://registry.npmjs.org
           cache: yarn
 
       - run: yarn install --frozen-lockfile
@@ -81,6 +80,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release create "${RELEASE_TAG}" --target main --title "${RELEASE_TAG}" --notes-file "${{ runner.temp }}/release-notes.md" --latest
+
+      # Deferred until here: setup-node's registry-url writes an npmrc line referencing
+      # ${NODE_AUTH_TOKEN}. Yarn Classic errors resolving *any* npmrc-backed command
+      # (e.g. the `yarn install` above) if that env var isn't set — and it deliberately
+      # isn't, since OIDC needs no static token. Only npm reads this lazily/safely.
+      - name: Configure npm registry for OIDC publish
+        if: ${{ inputs.npm_publish }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
 
       # OIDC Trusted Publishing: no npm token/secret involved. npm exchanges this job's
       # GitHub Actions OIDC identity (id-token: write, above) for a short-lived publish
