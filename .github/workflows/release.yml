@@ -54,6 +54,14 @@ jobs:
       - name: Bump version and update CHANGELOG.md
         run: node scripts/prepare-release.cjs --increment "${{ inputs.version_increment }}" --notes-out "${{ runner.temp }}/release-notes.md" --github-env
 
+      # The CI job has its own filesystem, and npm publish skips prepublishOnly below.
+      # Build and verify the package in this job before publishing any release artifacts.
+      - name: Build and verify release package
+        run: |
+          yarn build
+          yarn smoke
+          yarn pack:check
+
       # main can move while this job runs (another release, a direct push): a plain push is
       # then rejected as non-fast-forward. Rebase the release commit onto origin/main and
       # retry instead of failing the whole run.
@@ -99,9 +107,9 @@ jobs:
       # CLI >= 11.5.1, hence the upgrade — Node 22's bundled npm predates it.
       #
       # --ignore-scripts skips prepublishOnly (which shells out to yarn and would hit
-      # the same ${NODE_AUTH_TOKEN} problem as above). It's redundant here anyway — the
-      # ci job above already ran that same lint/typecheck/build/test/smoke suite; the
-      # hook stays in package.json as a safety net for a manual, non-CI `npm publish`.
+      # the same ${NODE_AUTH_TOKEN} problem as above). CI already ran lint/typecheck/tests,
+      # and this job rebuilt and checked dist before configuring the registry. The hook
+      # stays in package.json as a safety net for a manual, non-CI `npm publish`.
       - name: Publish to npm (OIDC Trusted Publishing)
         if: ${{ inputs.npm_publish }}
         run: |

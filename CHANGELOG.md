@@ -5,6 +5,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Correct the GitHub repository URLs in the npm package metadata to use `vendure_plugin_factorydrive`.
+- Build and verify the npm package in the release job so the published archive includes the compiled JavaScript
+  and TypeScript declarations in `dist/`, even when `npm publish` skips lifecycle scripts.
+
 ## [0.1.2] - 2026-09-30
 
 ### Fixed
