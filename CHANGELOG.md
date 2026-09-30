@@ -5,6 +5,13 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Release workflow: the npm registry setup step (`actions/setup-node` with `registry-url`) ran before
+  `yarn install`, which broke the install with a Yarn Classic error (`Failed to replace env in config:
+  ${NODE_AUTH_TOKEN}`) since no static npm token is set (publishing uses OIDC Trusted Publishing). The
+  registry setup is now deferred until immediately before `npm publish`.
+
 ## [0.1.0] - 2026-09-30
 
 ### Added
