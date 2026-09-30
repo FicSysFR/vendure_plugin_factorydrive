@@ -3,7 +3,7 @@
 ## Reporting a vulnerability
 
 Please report vulnerabilities privately through GitHub's **Report a vulnerability** button on
-[FicSysFR/vendure-plugin-factorydrive](https://github.com/FicSysFR/vendure-plugin-factorydrive/security/advisories/new).
+[FicSysFR/vendure_plugin_factorydrive](https://github.com/FicSysFR/vendure_plugin_factorydrive/security/advisories/new).
 Do not open a public issue. You will get an acknowledgement within a few working days.
 
 ## Scope

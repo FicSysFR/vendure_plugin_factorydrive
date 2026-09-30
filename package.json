@@ -2,10 +2,10 @@
   "name": "@ficsysfr/vendure-plugin-factorydrive",
   "version": "0.1.2",
   "description": "Vendure AssetStorageStrategy backed by Factorydrive disks (local, S3, RustFS, MinIO, R2, SFTP, custom drivers)",
-  "repository": "https://github.com/FicSysFR/vendure-plugin-factorydrive.git",
-  "homepage": "https://github.com/FicSysFR/vendure-plugin-factorydrive#readme",
+  "repository": "https://github.com/FicSysFR/vendure_plugin_factorydrive.git",
+  "homepage": "https://github.com/FicSysFR/vendure_plugin_factorydrive#readme",
   "bugs": {
-    "url": "https://github.com/FicSysFR/vendure-plugin-factorydrive/issues"
+    "url": "https://github.com/FicSysFR/vendure_plugin_factorydrive/issues"
   },
   "author": "tacxou <12997062+tacxou@users.noreply.github.com> (https://github.com/tacxou)",
   "contributors": [
@@ -16,7 +16,7 @@
     },
     {
       "name": "Contributors",
-      "url": "https://github.com/FicSysFR/vendure-plugin-factorydrive/graphs/contributors"
+      "url": "https://github.com/FicSysFR/vendure_plugin_factorydrive/graphs/contributors"
     }
   ],
   "license": "Apache-2.0",
