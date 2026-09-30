@@ -1,6 +1,6 @@
 {
   "name": "@ficsysfr/vendure-plugin-factorydrive",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vendure AssetStorageStrategy backed by Factorydrive disks (local, S3, RustFS, MinIO, R2, SFTP, custom drivers)",
   "repository": "https://github.com/FicSysFR/vendure-plugin-factorydrive.git",
   "homepage": "https://github.com/FicSysFR/vendure-plugin-factorydrive#readme",

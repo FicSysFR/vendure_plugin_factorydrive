@@ -5,6 +5,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-30
+
 ### Fixed
 
 - Release workflow: the npm registry setup step (`actions/setup-node` with `registry-url`) ran before
