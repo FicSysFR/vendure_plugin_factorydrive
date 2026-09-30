@@ -5,6 +5,13 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- Release workflow: `npm publish` now runs with `--ignore-scripts` so its `prepublishOnly` hook
+  (which shells out to yarn) doesn't hit the same Yarn Classic `${NODE_AUTH_TOKEN}` error, this
+  time triggered during the publish step itself. The check suite it would have re-run already ran
+  in the `ci` job that gates this workflow.
+
 ## [0.1.1] - 2026-09-30
 
 ### Fixed
