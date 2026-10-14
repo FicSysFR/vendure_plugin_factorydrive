@@ -163,7 +163,7 @@
   resolved "https://registry.yarnpkg.com/@apollo/utils.withrequired/-/utils.withrequired-2.0.1.tgz#e72bc512582a6f26af150439f7eb7473b46ba874"
   integrity sha512-YBDiuAX9i1lLc6GeTy1m7DGLFn/gMnvXqlalOIMjM7DeOgIacEjjfwPqb0M1CQ2v11HhR15d1NmxJoRCfrNqcA==
 
-"@apollographql/graphql-playground-html@1.6.29":
+"@apollographql/graphql-playground-html@1.6.29", "@apollographql/graphql-playground-html@^1.6.29":
   version "1.6.29"
   resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-html/-/graphql-playground-html-1.6.29.tgz#a7a646614a255f62e10dcf64a7f68ead41dec453"
   integrity sha512-xCcXpoz52rI4ksJSdOCxeOCn2DLocxwHf9dVT/Q90Pte1LX+LY+91SFtJF3KXVHH8kEin+g1KKCQPKBjZJfWNA==
@@ -818,6 +818,16 @@
   version "10.11.0"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-10.11.0.tgz#2513dca9ca25bab5a2651da2d66c37b1e2616bdf"
   integrity sha512-iBFR9GXIs0gCD+yc3hoNswViL1O5josI33dUqiNStFI/MHLCEPduasceAcazRH77YONKNiviHBV8f7OgcT4o2Q==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.1.1"
+    "@whatwg-node/promise-helpers" "^1.0.0"
+    cross-inspect "1.0.1"
+    tslib "^2.4.0"
+
+"@graphql-tools/utils@^11.0.0":
+  version "11.2.2"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-11.2.2.tgz#5e2c8458dc31d856c94cab0a02aabfd9a5e6e616"
+  integrity sha512-Do2A/t6ayqOma8m7PvpYMsCBswL+NB35BQSng4GWSBqafL2/BnfAZy/NSENPwV721Rm2fG0BHETFC0+FJJZmLw==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     "@whatwg-node/promise-helpers" "^1.0.0"
@@ -1663,10 +1673,10 @@
     "@types/node" "*"
     "@types/ssh2-streams" "*"
 
-"@vendure/asset-server-plugin@3.7.3":
-  version "3.7.3"
-  resolved "https://registry.yarnpkg.com/@vendure/asset-server-plugin/-/asset-server-plugin-3.7.3.tgz#d22bd8e0d7cba65ed43bd1e7604e44814caca4ba"
-  integrity sha512-cJVTA2e0R9KG3kX6VFSL3RuqABZgh9EuFdrCUm7hXHi5A4psNPOQPs7fIknGaj0Ft2Xb+Fl+FMhuOVMozsIj2g==
+"@vendure/asset-server-plugin@3.7.4":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@vendure/asset-server-plugin/-/asset-server-plugin-3.7.4.tgz#35218f83b406b4b812b7f925bb7fceefdc7803f7"
+  integrity sha512-GApIA8H5C+4mSPspuQPFxva3RN+qUs578WunY6M33VgxFhvfKYiRqs/E+/pq2BgA8Xb0B4QIdpIMlhFcDgXhLg==
   dependencies:
     "@types/express" "^5.0.1"
     express "^5.1.0"
@@ -1675,18 +1685,20 @@
     mime-types "^3.0.2"
     sharp "~0.34.5"
 
-"@vendure/common@3.7.3":
-  version "3.7.3"
-  resolved "https://registry.yarnpkg.com/@vendure/common/-/common-3.7.3.tgz#ed95173da99b6a9910c4be9e10d4964ce95c799f"
-  integrity sha512-gXH5IY0RLMBAwaqHxMOhNqmqYVN7g84XYVvo0xnK8PYO5j77hUOczQI1a55C7HEsHdcJg9P5j0e1/00nM+213g==
+"@vendure/common@3.7.4":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@vendure/common/-/common-3.7.4.tgz#b1fc639ffab0507de0623f6932b5c1b0363c941c"
+  integrity sha512-Hn7hl25apuToLRVMdNFRYTDPASttjolf0z4E8BNjXK7d/mbo3DLFZ22fY84YQ4ulaA+qOomdqN6cbOEZxeJcDg==
 
-"@vendure/core@3.7.3":
-  version "3.7.3"
-  resolved "https://registry.yarnpkg.com/@vendure/core/-/core-3.7.3.tgz#1b4642fb2f58c7fbf0ef9c2ea78f8f12c20d32b5"
-  integrity sha512-Og8/rWxpk2SfgnJpTp2JI1cj5b4b0wOIkiC8ACw6uut48o5iPOceX4cp3JlOUmEhyl/JnaoHx0+DLJrRwDiigg==
+"@vendure/core@3.7.4":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@vendure/core/-/core-3.7.4.tgz#a95f499d0675addd03f86cd697e9cfa2e5546b94"
+  integrity sha512-xGomnWe1j+TIY3wRajm7ZZ+EuMJgEVDUkotHeNBp5vXOlNY7A3Ol6BXA5BVFkWI36iusc+l1MMReSphL6E6QiA==
   dependencies:
     "@apollo/server" "^4.12.2"
+    "@apollographql/graphql-playground-html" "^1.6.29"
     "@graphql-tools/stitch" "^10.1.16"
+    "@graphql-tools/utils" "^11.0.0"
     "@nestjs/apollo" "~13.1.0"
     "@nestjs/common" "^11.0.12"
     "@nestjs/core" "^11.0.12"
@@ -1694,7 +1706,7 @@
     "@nestjs/platform-express" "^11.0.12"
     "@nestjs/typeorm" "^11.0.0"
     "@types/express" "^5.0.1"
-    "@vendure/common" "3.7.3"
+    "@vendure/common" "3.7.4"
     bcrypt "^6.0.0"
     cookie-session "^2.1.0"
     cron-time-generator "^2.0.3"
@@ -1725,13 +1737,13 @@
     semver "^7.6.0"
     typeorm "^0.3.21"
 
-"@vendure/testing@3.7.3":
-  version "3.7.3"
-  resolved "https://registry.yarnpkg.com/@vendure/testing/-/testing-3.7.3.tgz#b417904993f7bed58c60931f7db949f6ec0e97b5"
-  integrity sha512-j6s2M2tgEDKgeHQlXcOtdZFoskD6YdGmE1qhLMyFwUk5TKpYwDxstVMcUmIvh52X95PqLWZY8qVpWGNE9ESY8w==
+"@vendure/testing@3.7.4":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@vendure/testing/-/testing-3.7.4.tgz#27056b75d9e3c117d8547c6034bf256d143abe9d"
+  integrity sha512-QquYPElD+bDMqTEAkCOOuhOOu37kloiquf4C+PbXEZtIZOTBe4IyuEZn44qXaggRvUjAJLly1o+ZY2csgD0nZg==
   dependencies:
     "@graphql-typed-document-node/core" "^3.2.0"
-    "@vendure/common" "3.7.3"
+    "@vendure/common" "3.7.4"
     faker "^4.1.0"
     graphql "^16.11.0"
     graphql-tag "^2.12.6"
